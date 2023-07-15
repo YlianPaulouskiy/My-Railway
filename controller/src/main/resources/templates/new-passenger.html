@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New Passenger</title>
+</head>
+<style>
+    .update_button {
+        background-color: #ddd;
+        border: none;
+        color: black;
+        border-radius: 6px;
+        padding: 10px 20px;
+        text-align: center;
+        font-size: 12px;
+        margin: 4px 2px;
+        transition: 0.3s;
+    }
+
+    .update_button:hover {
+        background-color: #3e8e41;
+        color: white;
+    }
+
+    .block {
+        text-align: left;
+        margin: 15px 5%;
+        border: 1px solid #111111;
+        display: block;
+        width: 25%;
+    }
+
+    .block_in {
+        margin: 30px 30px;
+    }
+</style>
+
+<body>
+<div th:include="~{fragment::menu_button}"></div>
+
+<div id="main">
+    <div class="block">
+        <div class="block_in">
+            <form th:action="@{/passengers/create}" method="post">
+                <h2>Add Passenger</h2>
+                <label for="create_name">
+                    <b class="inline" id="create_name">Name: </b>
+                    <input class="inline" type="text" name="name" required>
+                </label><br>
+                <label for="create_lastname">
+                    <b class="inline" id="create_lastname">Lastname: </b>
+                    <input class="inline" type="text" name="lastName" required>
+                </label><br>
+                <label for="create_middle_name">
+                    <b class="inline" id="create_middle_name">Middle Name: </b>
+                    <input class="inline" type="text" name="middleName" required>
+                </label><br>
+                <label for="gender"><b class="inline">Gender: </b>
+                    <select class="inline" id="gender" name="gender">
+                        <option th:each="gender : ${genders}"
+                                th:value="${gender}"
+                                th:text="${gender}">Gender
+                        </option>
+                    </select>
+                </label><br>
+                <label for="create_doc_type">
+                    <b class="inline">Document: </b>
+                    <select id="create_doc_type" name="document">
+                        <option th:each="document : ${documents}"
+                                th:value="${document}"
+                                th:text="${document}">Document
+                        </option>
+                    </select>
+                </label><br>
+                <label for="create_doc_no">
+                    <b class="inline" id="create_doc_no">Document Number: </b>
+                    <input class="inline" type="text" name="documentNo" required>
+                </label><br>
+                <button type="submit" class="update_button">Create passenger</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

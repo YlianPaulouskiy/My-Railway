@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/railway
+    username: root
+    password: root
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties.hibernate:
+      show_sql: true
+      format_sql: true
+      hbm2ddl.auto: none
+    open-in-view: false
+avatar:
+  image:
+    bucket: D:\java\IT Academy\homework\finalProject\spring\Railway\service\src\main\resources\static\avatar
+logging:
+  level:
+    root: INFO
+  file:
+    name: railway.log
+    path: /
+  logback:
+    rollingpolicy:
+      clean-history-on-start: true

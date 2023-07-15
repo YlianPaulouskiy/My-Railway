@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    username: test
+    password: test
+  jpa:
+    properties.hibernate:
+      show_sql: true
+      format_sql: true
+      hbm2ddl.auto: update
+avatar:
+  image:
+    bucket: D:\java\IT Academy\homework\finalProject\spring\Railway\service\src\main\resources\static\avatar

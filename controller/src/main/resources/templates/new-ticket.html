@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Place</title>
+    <style>
+        .block {
+            text-align: left;
+            margin: 30px 30px;
+            border: 3px solid #cccccc;
+            display: block;
+            width: 40%;
+        }
+
+        .block_in {
+            margin: 60px 40px;
+        }
+
+        .inline {
+            display: inline-block;
+        }
+
+        p.str675:after {
+            content: '\21D2';
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+        #main {
+            transition: margin-left .5s;
+            padding: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        /* Extra styles for the cancel button */
+        .cancelbtn {
+            padding: 14px 20px;
+            background-color: #f44336;
+        }
+
+        /* Float cancel and signup buttons and add an equal width */
+        .cancelbtn, .signupbtn {
+            float: left;
+            width: 20%;
+        }
+
+        .container {
+            padding: 8px;
+        }
+
+        /* Float cancel and signup buttons and add an equal width */
+        .signupbtn {
+            float: left;
+            width: 40%;
+        }
+
+        /* Change styles for span and cancel button on extra small screens */
+        @media screen and (max-width: 300px) {
+            .cancelbtn, .signupbtn {
+                width: 20%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div th:include="~{fragment::menu_button}"></div>
+
+<div id="main">
+    <div class="block">
+        <div class="block_in">
+            <form th:action="@{/tickets/create}" method="post">
+                <div class="inline">
+                    <b th:text="${from.station.name}">from station</b>
+                    <h3 th:text="${from.departureTime}">departure Name</h3>
+                </div>
+                <div class="inline">
+                    <p class="str675" style="font-size: 54px;"></p>
+                </div>
+                <div class="inline">
+                    <b th:text="${to.station.name}">to station</b>
+                    <h3 th:text="${to.arrivalTime}">arrival time</h3>
+                </div>
+                <input type="hidden" name="fromId" th:value="${from.id}">
+                <input type="hidden" name="toId" th:value="${to.id}"><br>
+                <label for="seat" style="margin-left: 11%">
+                    <h3 class="inline">Select Seat: </h3><br>
+                    <select id="seat" name="seatId">
+                        <option th:each="seat : ${seats}"
+                                th:value="${seat.id}"
+                                th:text="${seat.wagon.type + ' № ' + seat.wagon.no + ' ' + seat.type + ' № ' + seat.no + ' cost: ' + seat.cost}">
+                            seat No
+                        </option>
+                    </select>
+                </label><br>
+                <label for="passenger" style="margin-left: 11%">
+                    <h3 class="inline">Select Passenger: </h3>
+                    <select id="passenger" name="passengerId">
+                        <option th:each="passenger : ${passengers}"
+                                th:value="${passenger.id}"
+                                th:text="${passenger.lastName + ' ' + passenger.name}">passenger Fio
+                        </option>
+                    </select>
+                </label><br>
+                <div class="container" style="background-color:#f1f1f1; text-align: left">
+                    <button type="button" class="cancelbtn" onclick="document.location='/main'">Cancel</button>
+                    <button type="submit" class="signupbtn">Add ticket</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

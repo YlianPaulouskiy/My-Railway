@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Routes</title>
+    <style>
+        .block {
+            border: 3px solid #111111;
+            display: block;
+            /*margin: 40px;*/
+        }
+
+        .inline {
+            display: inline-block;
+            margin: 10px 40px;
+        }
+
+        /*для стрелки*/
+        .arrow-1 {
+            cursor: pointer;
+            position: relative;
+            width: 80px;
+            height: 50px;
+            margin: 20px;
+        }
+
+        .arrow-1 div {
+            position: relative;
+            top: 20px;
+            width: 90px;
+            height: 10px;
+            background-color: #337AB7;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, .2);
+            left: 0;
+            display: block;
+        }
+
+        .arrow-1 div::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 10px;
+            top: -11px;
+            right: -8px;
+            background-color: #337AB7;
+            transform: rotate(45deg);
+        }
+
+        .arrow-1 div::before {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 10px;
+            top: 11px;
+            right: -8px;
+            background-color: #337AB7;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, .2);
+            transform: rotate(-45deg);
+        }
+
+        .arrow-1:hover {
+            animation: arrow-1 1s linear infinite;
+        }
+
+        @keyframes arrow-1 {
+            0% {
+                left: 0;
+            }
+            50% {
+                left: 10px;
+            }
+            100% {
+                left: 0;
+            }
+        }
+
+        .button {
+            border-radius: 4px;
+            background-color: #818181;
+            border: none;
+            color: #FFFFFF;
+            text-align: center;
+            font-size: 28px;
+            padding: 20px;
+            width: 200px;
+            transition: all 0.5s;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+        #main {
+            transition: margin-left .5s;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div th:include="~{fragment::menu_button}"></div>
+
+<div id="main">
+    <div th:each="train : ${trains}">
+        <div class="block">
+            <div class="inline">
+                <h1 th:text="${'Train #' + train.code}">Train Code</h1>
+                <h2 th:text="${'Type: ' + train.type}">Train type</h2>
+            </div>
+            <div class="inline">
+                <h1 th:text="${train.from.station.name}">Departure Station</h1>
+                <h2 th:text="${train.from.departureTime.toString.replace('T', ' ')}">DepartureTime</h2>
+            </div>
+            <div class="inline">
+                <div class="arrow-1">
+                    <div></div>
+                </div>
+            </div>
+            <div class="inline">
+                <h1 th:text="${train.to.station.name}">Arrival Station</h1>
+                <h2 th:text="${train.to.arrivalTime.toString.replace('T', ' ')}">DepartureTime</h2>
+            </div>
+            <div class="inline">
+                <h2>Empty places:</h2>
+                <h1 th:text="${train.seatsCount}">Seats count</h1>
+            </div>
+            <div class="inline">
+                <form th:action="@{/tickets/new/{trainId}(trainId=${train.id})}" style="margin-bottom: 40px">
+                    <input type="hidden" name="from" th:value="${train.from.station.name}">
+                    <input type="hidden" name="to" th:value="${train.to.station.name}">
+                    <button class="button" type="submit">Buy Ticket</button>
+                </form>
+            </div>
+        </div>
+        <br>
+    </div>
+</div>
+</body>
+</html>

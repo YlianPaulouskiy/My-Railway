@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal Info</title>
+</head>
+<style>
+    .block {
+        text-align: left;
+        margin: 15px 5%;
+        border: 1px solid #111111;
+        display: block;
+        width: 50%;
+    }
+
+    .block_in {
+        margin: 30px 30px;
+    }
+
+    .inline {
+        display: inline-block;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    p.str675:after {
+        content: '\21D2';
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .update_button {
+        background-color: #ddd;
+        border: none;
+        color: black;
+        border-radius: 6px;
+        padding: 10px 20px;
+        text-align: center;
+        font-size: 12px;
+        margin: 4px 2px;
+        transition: 0.3s;
+    }
+
+    .update_button:hover {
+        background-color: #3e8e41;
+        color: white;
+    }
+
+    .remove_button {
+        background-color: #f4511e;
+        border: none;
+        color: white;
+        border-radius: 6px;
+        padding: 10px 20px;
+        text-align: center;
+        font-size: 12px;
+        /*margin: 60px 40px;*/
+        opacity: 0.6;
+        transition: 0.3s;
+    }
+
+    .remove_button:hover {
+        opacity: 1
+    }
+
+    /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+    #main {
+        transition: margin-left .5s;
+        padding: 20px;
+    }
+
+    .new_button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        width: 17%;
+        opacity: 0.9;
+    }
+
+    new_button:hover {
+        opacity: 1;
+    }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button:hover {
+        opacity: 0.8;
+    }
+
+    .container {
+        padding: 16px;
+    }
+
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0); /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+        padding-top: 60px;
+    }
+
+    /* Modal Content/Box */
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+        border: 1px solid #888;
+        width: 40%; /* Could be more or less, depending on screen size */
+    }
+
+    /* Add Zoom Animation */
+    .animate {
+        -webkit-animation: animatezoom 0.6s;
+        animation: animatezoom 0.6s
+    }
+
+    @-webkit-keyframes animatezoom {
+        from {
+            -webkit-transform: scale(0)
+        }
+        to {
+            -webkit-transform: scale(1)
+        }
+    }
+
+    @keyframes animatezoom {
+        from {
+            transform: scale(0)
+        }
+        to {
+            transform: scale(1)
+        }
+    }
+
+    /* Change styles for span and cancel button on extra small screens */
+    @media screen and (max-width: 300px) {
+        span.psw {
+            display: block;
+            float: none;
+        }
+    }
+</style>
+<body>
+
+<div th:include="~{fragment::menu_button}"></div>
+
+<div id="main">
+    <div class="block">
+        <div class="block_in">
+            <h1 style="text-align: center">Personal Info</h1>
+            <form th:action="@{/users/update/{userId}(userId=${session.user.id})}" method="post"
+                  enctype="multipart/form-data">
+                <!--    отображение картинки-->
+                <div th:if="${session.user.avatar != null  && !session.user.avatar.isBlank}">
+                    <img width=150px th:src="@{/api/v1/users/avatar}" alt="User Image"/>
+                </div>
+                <label for="name">
+                    <h2 class="inline" id="name">Name: </h2>
+                    <input class="inline" type="text" name="name" th:value="${session.user.name}" required>
+                </label><br>
+                <label for="lastname">
+                    <h2 class="inline" id="lastname">Lastname: </h2>
+                    <input class="inline" type="text" name="lastName" th:value="${session.user.lastName}" required>
+                </label><br>
+                <label for="role">
+                    <h2 class="inline" id="role" th:text="${'Role: ' + session.user.role.name}">Role: </h2>
+                </label><br>
+                <label for="email">
+                    <h2 class="inline" id="email">Email: </h2>
+                    <input class="inline" type="text" name="email" th:value="${session.user.email}" required>
+                    <div th:each="error : ${errors}">
+                        <div th:if="${error.getDefaultMessage.contains('Email')}">
+                            <p style="color: coral" th:text="${error.getDefaultMessage}"></p>
+                        </div>
+                    </div>
+                </label><br>
+                <!--    ВСТАВКА КАРТИНКИ-->
+                <label for="image">
+                    <h2 class="inline" id="image">Select new Avatar: </h2>
+                    <input class="inline" type="file" name="image">
+                </label><br>
+                <button class="update_button" type="submit">Update</button>
+            </form>
+
+            <!--                    сменить пароль-->
+            <button class="update_button" onclick="document.getElementById('id01').style.display='block'"
+                    style="width:auto;">Change Password
+            </button>
+            <div id="id01" class="modal">
+                <form class="modal-content animate" th:action="@{/users/password/change}" method="post">
+                    <div class="container">
+                        <h2>Change Password</h2>
+                        <label for="oldPsw"><h2>Old Password</h2>
+                            <input id="oldPsw" type="password" placeholder="Enter Old Password" name="oldPassword"
+                                   required>
+                        </label><br>
+                        <label for="newPsw"><h2>New Password</h2>
+                            <input id="newPsw" type="password" placeholder="Enter New Password" name="newPassword"
+                                   required>
+                        </label><br>
+                        <button type="submit" class="update_button">Change</button>
+                    </div>
+                    <div class="container" style="background-color:#f1f1f1">
+                        <button type="button" onclick="document.getElementById('id01').style.display='none'"
+                                class="remove_button">Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <script>
+                // Get the modal
+                var modal = document.getElementById('id01');
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+            </script>
+
+            <form th:action="@{/users/remove/{userId}(userId=${session.user.id})}" method="post">
+                <button class="remove_button" type="submit">Remove</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

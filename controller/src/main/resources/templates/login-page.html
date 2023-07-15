@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        form {
+            border: 3px solid #f1f1f1;
+            width: 50%;
+            margin-left: 25%;
+        }
+
+        input[type=text], input[type=password] {
+            width: 50%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 50%;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        /* Extra styles for the cancel button */
+        .cancelbtn {
+            padding: 14px 20px;
+            background-color: #f44336;
+        }
+
+        /* Float cancel and signup buttons and add an equal width */
+        .cancelbtn, .signupbtn {
+            float: left;
+            width: 50%;
+
+        }
+
+        .imgcontainer {
+            text-align: center;
+            margin: 12px 0 6px 0;
+        }
+
+        img.avatar {
+            width: 20%;
+            border-radius: 25%;
+        }
+
+        .container {
+            padding: 8px;
+        }
+
+        /* Float cancel and signup buttons and add an equal width */
+        .signupbtn {
+            float: left;
+            width: 50%;
+        }
+
+        /* Change styles for span and cancel button on extra small screens */
+        @media screen and (max-width: 300px) {
+            .cancelbtn, .signupbtn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h2 style="text-align: center">Login</h2>
+
+<form class="modal-content animate" style="text-align: center" th:action="@{/login}" method="post">
+    <div class="imgcontainer">
+        <img th:src="@{/images/img.png}" alt="Avatar" class="avatar">
+    </div>
+    <div class="container">
+        <label for="email"><b>Email</b></label>
+        <input id="email" type="text" placeholder="Enter Email" name="username" required>
+        <br>
+        <label for="pwd"><b>Password</b></label>
+        <input id="pwd" type="password" placeholder="Enter Password" name="password" required>
+    </div>
+    <div style="color: red" th:if="${param.error}">
+        Invalid username or password.
+    </div>
+    <div class="container" style="background-color:#f1f1f1; text-align: left">
+        <button type="button" class="cancelbtn" onclick="document.location='/main'">Cancel</button>
+        <button type="submit" class="signupbtn">Login</button>
+    </div>
+</form>
+
+</body>
+</html>

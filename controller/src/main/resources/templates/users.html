@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Users Manager</title>
+    <style>
+        /*стиль для кнопки изменения*/
+        .update_button {
+            background-color: #ddd;
+            border: none;
+            color: black;
+            border-radius: 6px;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 12px;
+            margin: 4px 2px;
+            transition: 0.3s;
+        }
+
+        .update_button:hover {
+            background-color: #3e8e41;
+            color: white;
+        }
+
+        /*стиль для кнопки удаления*/
+        .remove_button {
+            background-color: #f4511e;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 12px;
+            margin: 4px 2px;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+        .remove_button:hover {
+            opacity: 1
+        }
+
+        /*стиль для таблицы*/
+        .table {
+            width: 100%;
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        .table thead th {
+            padding: 10px;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 20px;
+            text-align: left;
+            color: #444441;
+            border-top: 2px solid #716561;
+            border-bottom: 2px solid #716561;
+        }
+
+        .table tbody td {
+            padding: 10px;
+            font-size: 14px;
+            line-height: 20px;
+            color: #444441;
+            border-top: 1px solid #716561;
+        }
+
+        /*кнопка для перехода на orders и passengers*/
+        .forward_button {
+            border-radius: 4px;
+            background-color: #337AB7;
+            border: none;
+            color: #FFFFFF;
+            text-align: center;
+            font-size: 12px;
+            padding: 10px 20px;
+            width: 100px;
+            transition: all 0.5s;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .forward_button span {
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            transition: 0.5s;
+        }
+
+        .forward_button span:after {
+            content: '\00bb';
+            position: absolute;
+            opacity: 0;
+            top: 0;
+            right: -20px;
+            transition: 0.5s;
+        }
+
+        .forward_button:hover span {
+            padding-right: 25px;
+        }
+
+        .forward_button:hover span:after {
+            opacity: 1;
+            right: 0;
+        }
+
+        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+        #main {
+            transition: margin-left .5s;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div th:include="~{fragment::menu_button}"></div>
+
+<div id="main">
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Name</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th style="text-align: center">Orders</th>
+            <th style="text-align: center">Passengers</th>
+            <th>Role</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <div th:each="user : ${users.content}">
+            <tr>
+                <td th:text="${user.id}">id</td>
+                <td th:text="${user.name}">name</td>
+                <td th:text="${user.lastName}">lastName</td>
+                <td th:text="${user.email}">email</td>
+
+                <td style="text-align: center">
+                    <form th:action="@{/admin/orders/{userId}(userId=${user.id})}" method="get" target="_blank">
+                        <button class="forward_button" type="submit"><span>Orders</span></button>
+                    </form>
+                </td>
+
+                <td style="text-align: center">
+                    <form th:action="@{/admin/passengers/{userId}(userId=${user.id})}" method="get" target="_blank">
+                        <button class="forward_button" type="submit" style="width: 150px"><span>Passengers</span>
+                        </button>
+                    </form>
+                </td>
+
+                <form th:action="@{/admin/update/role/{userId}(userId = ${user.id})}" method="post">
+                    <td>
+                        <label for="role">
+                            <select id="role" name="roleId">
+                                <option th:each="role : ${roles}"
+                                        th:value="${role.id}"
+                                        th:selected="${role.name == user.role.name}"
+                                        th:text="${role.name}">Role
+                                </option>
+                            </select>
+                        </label>
+                    </td>
+                    <td style="text-align: center">
+                        <button class="update_button" type="submit">Update Role</button>
+                    </td>
+                </form>
+
+                <form th:action="@{/admin/remove/user/{userId}(userId = ${user.id})}" method="post">
+                    <td style="text-align: center">
+                        <button class="remove_button" type="submit">Remove</button>
+                    </td>
+                </form>
+            </tr>
+        </div>
+        </tbody>
+    </table>
+
+    <div th:include="~{fragment::users_page_buttons}"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Routes</title>
+
+    <style>
+        .central { /*Центрировать*/
+            padding: 50px;
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .inline {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<div th:include="~{fragment::menu_button}"></div>
+
+<!--весь контент страницы-->
+<div id="main">
+    <form class="central" th:action="@{/trains/search}" method="post">
+        <label for="from">
+            <h2 class="inline">From:</h2>
+            <input class="inline" id="from" name="from" type="text" list="stations" autocomplete="off">
+        </label><br>
+        <label for="to">
+            <h2 class="inline">To:</h2>
+            <input class="inline" id="to" name="to" type="text" list="stations" autocomplete="off">
+        </label><br>
+        <label for="when">
+            <h2 class="inline">When:</h2>
+            <input class="inline" id="when" name="when" type="date">
+            <!--        установка текущей даты-->
+            <script>
+                document.getElementById('when').value = new Date().toISOString().substring(0, 10);
+            </script>
+        </label>
+        <button type="submit">Find</button>
+    </form>
+</div>
+
+<!--список станций, которые лежат в базе-->
+<datalist id="stations">
+    <div th:each="station : ${stations}">
+        <option th:value="${station.name}"></option>
+    </div>
+</datalist>
+
+</body>
+</html>

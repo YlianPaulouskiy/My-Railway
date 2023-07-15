@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Passengers</title>
+
+    <style>
+        .block {
+            text-align: left;
+            margin: 15px 5%;
+            border: 1px solid #111111;
+            display: block;
+            width: 50%;
+        }
+
+        .block_in {
+            margin: 30px 30px;
+        }
+
+        .inline {
+            display: inline-block;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        p.str675:after {
+            content: '\21D2';
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .update_button {
+            background-color: #ddd;
+            border: none;
+            color: black;
+            border-radius: 6px;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 12px;
+            margin: 4px 2px;
+            transition: 0.3s;
+        }
+
+        .update_button:hover {
+            background-color: #3e8e41;
+            color: white;
+        }
+
+        .remove_button {
+            background-color: #f4511e;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 12px;
+            /*margin: 60px 40px;*/
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+        .remove_button:hover {
+            opacity: 1
+        }
+
+        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+        #main {
+            transition: margin-left .5s;
+            padding: 20px;
+        }
+
+        .new_button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            width: 17%;
+            opacity: 0.9;
+        }
+
+        new_button:hover {
+            opacity: 1;
+        }
+
+    </style>
+</head>
+<body>
+<div th:include="~{fragment::menu_button}"></div>
+
+<div th:with="currentUrl=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}">
+    <div th:if="${currentUrl.toUriString().endsWith('passengers')}">
+        <form style="margin: 10px 7%" th:action="@{/passengers/create}" method="get">
+            <button type="submit" class="new_button">Create Passenger</button>
+        </form>
+    </div>
+
+    <div id="main">
+        <div th:each="passenger : ${passengers.content}" class="block">
+            <div class="block_in">
+                <b th:text="'Passenger # ' + ${passenger.id}" style="text-align: center">Passenger # id</b>
+                <br><br>
+                <form th:action="@{/passengers/update/{passengerId}(passengerId=${passenger.id})}" method="post">
+                    <label for="name">
+                        <b class="inline" id="name">Name: </b>
+                        <input class="inline" type="text" name="name" th:value="${passenger.name}" required>
+                    </label>
+                    <b class="inline" style="margin-left: 11%">Gender: </b>
+                    <div class="inline" th:each="gender : ${genders}">
+                        <label th:for="${gender}" th:text="${gender}">Gender: </label>
+                        <input th:id="${gender}" type="radio" name="gender" th:value="${gender}"
+                               th:checked="${gender == passenger.gender}">
+                    </div>
+                    <br>
+                    <label for="lastname">
+                        <b class="inline" id="lastname">Lastname: </b>
+                        <input class="inline" type="text" name="lastName" th:value="${passenger.lastName}" required>
+                    </label>
+                    <label for="documentType" style="margin-left: 11%">
+                        <b class="inline">Document: </b>
+                        <select id="documentType" name="document">
+                            <option th:each="document : ${documents}"
+                                    th:value="${document}"
+                                    th:selected="${passenger.document == document}"
+                                    th:text="${document}">Document
+                            </option>
+                        </select>
+                    </label>
+                    <br>
+                    <label for="midname">
+                        <b class="inline" id="midname">Middle Name: </b>
+                        <input class="inline" type="text" name="middleName"
+                               th:value="${passenger.middleName}" required>
+                    </label>
+                    <label for="documentNo" style="margin-left: 11%">
+                        <b class="inline" id="documentNo">Document Number: </b>
+                        <input class="inline" type="text" name="documentNo" th:value="${passenger.documentNo}" required>
+                    </label>
+                    <br>
+
+                    <div th:if="${currentUrl.toUriString().endsWith('passengers')}">
+                        <div class="inline">
+                            <button class="update_button" type="submit">Update</button>
+                        </div>
+                    </div>
+                </form>
+                <div th:if="${currentUrl.toUriString().endsWith('passengers')}">
+                    <form th:action="@{/passengers/remove/{passengerId}(passengerId=${passenger.id})}" method="post">
+                        <button class="remove_button" type="submit">Remove</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="~{fragment::passengers_page_buttons}"></div>
+
+
+</body>
+</html>

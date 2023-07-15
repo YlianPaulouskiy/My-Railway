@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+
+    <style>
+        .block {
+            text-align: left;
+            margin: 30px 30px;
+            border: 3px solid #cccccc;
+            display: block;
+            width: 40%;
+        }
+
+        .block_in {
+            margin: 60px 40px;
+        }
+
+        .inline {
+            display: inline-block;
+        }
+
+        p.str675:after {
+            content: '\21D2';
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+        #main {
+            transition: margin-left .5s;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div th:include="~{fragment::menu_button}"></div>
+<div id="main">
+    <div th:each="order : ${orders.content}" class="block">
+        <div class="block_in">
+            <h1 th:text="${'Order # ' + order.id}" style="text-align: center">order # id</h1>
+            <p th:text=" ${'Status: ' +order.status}">status</p><br>
+            <b th:text="${'Registration time: ' + order.registrationTime}">registration time: time</b><br>
+            <b th:text="${'Order №: ' + order.no}">order №</b><br>
+            <div th:if="${order.payedTime != null}">
+                <b th:text="${'Payed time: ' + order.payedTime}">payed time: time</b>
+            </div>
+            <h1 style="text-align: center">Tickets</h1>
+            <div th:each="ticket : ${order.tickets}">
+                <div class="inline" style="margin: 0 50px">
+                    <b th:text="${'Ticket #  ' + ticket.id}">ticket id</b><br>
+                </div>
+                <div class="inline">
+                    <b th:text="${ticket.from.station.name}">from station</b>
+                    <h3 th:text="${ticket.from.departureTime}">departure Name</h3>
+                </div>
+                <div class="inline">
+                    <p class="str675" style="font-size: 54px;"></p>
+                </div>
+                <div class="inline">
+                    <b th:text="${ticket.to.station.name}">to station</b>
+                    <h3 th:text="${ticket.to.arrivalTime}">arrival time</h3>
+                </div>
+                <b th:text="${'Passenger: ' + ticket.passenger.lastName + ' ' + ticket.passenger.name}">Passenger</b><br>
+                <b th:text="${'Train: ' + ticket.seat.wagon.train.code} + ' : ' + ${ticket.seat.wagon.train.type}">
+                    Train code - Type</b><br>
+                <b th:text="${'Wagon: ' + ticket.seat.wagon.no  + '; ' + ticket.seat.wagon.type}">Wagon no -
+                    Type</b><br>
+                <b th:text="${'Seat: ' + ticket.seat.no + '; ' + ticket.seat.type}">Seat no - Type</b>
+            </div>
+        </div>
+    </div>
+
+    <div th:include="~{fragment::order_page_buttons}"></div>
+
+</div>
+</body>
+</html>
